@@ -2,14 +2,12 @@ Eye Blink Detection with Dlib, OpenCV, and Python
 
 This project detects and counts eye blinks in real-time using computer vision techniques. It leverages facial landmark detection to calculate the Eye Aspect Ratio (EAR), which is used to infer blink events. The program also tracks blink frequency over 20-second intervals and saves the data as a CSV file for further analysis, along with real-time visualization using Matplotlib.
 
-
 Installation
 - pip install dlib opencv-python numpy imutils scipy matplotlib seaborn
 
 Script: 
 - python3 blink_detection_final.py --shape-predictor shape_predictor_68_face_landmarks.dat --camera 0
 - python3 blink_detection_final.py --shape-predictor shape_predictor_68_face_landmarks.dat --video path_to_video.mp4
-
 
 Output
 - A live window showing the blink detection with EAR stats and rolling averages.
