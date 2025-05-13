@@ -1,3 +1,8 @@
+# pip install dlib opencv-python numpy imutils scipy matplotlib seaborn
+# https://github.com/rmenoli/Eye-blinking-SVM (REFERENCE)
+# blog: https://pyimagesearch.com/2017/04/24/eye-blink-detection-opencv-python-dlib/ 
+# reference 2: https://github.com/Practical-CV/EYE-BLINK-DETECTION-WITH-OPENCV-AND-DLIB
+# python3 blink_detection_final.py --shape-predictor shape_predictor_68_face_landmarks.dat --camera 0
 import argparse
 import time
 import dlib
@@ -10,6 +15,7 @@ from scipy.spatial import distance as dist
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import imutils
+import os
 from datetime import datetime
 
 # --- EAR Calculation ---
@@ -47,19 +53,26 @@ vs = FileVideoStream(args["video"]).start() if args["video"] else VideoStream(sr
 fileStream = bool(args["video"])
 time.sleep(1.0)
 
+# --- Create save folder ---
+save_folder = "saved_csv"
+os.makedirs(save_folder, exist_ok=True)
+
 # --- Timing ---
 start_time = time.time()
 interval_start = time.time()
 second_timer = 0
+
+# --- Create filename with timestamp ---
 timestamp_str = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-csv_filename = f"blinks_per_20s_{timestamp_str}.csv"
+csv_filename = os.path.join(save_folder, f"blinks_per_20s_{timestamp_str}.csv")
 
 # --- CSV Init ---
 with open(csv_filename, mode='w', newline='') as f:
     csv.writer(f).writerow(["Interval", "Blinks", "Rolling Average"])
 
 # --- Matplotlib Plot ---
-plt.style.use("seaborn")
+# plt.style.use("seaborn")
+plt.style.use("seaborn-v0_8") # ubuntu 24.04 - updated 
 fig, ax = plt.subplots()
 x_vals, y_vals = [], []
 line, = ax.plot([], [], lw=2)
@@ -68,7 +81,9 @@ ax.set_xlim(0, 1)
 ax.set_xlabel("20-sec Interval")
 ax.set_ylabel("Blinks")
 ax.set_title("Real-Time Blink Count (20s intervals)")
-ani = FuncAnimation(fig, lambda i: line.set_data(x_vals, y_vals), interval=1000, blit=True)
+# ani = FuncAnimation(fig, lambda i: line.set_data(x_vals, y_vals), interval=1000, blit=True)
+# ubuntu 24.04 - updated 
+ani = FuncAnimation(fig, lambda i: line.set_data(x_vals, y_vals) or [line], interval=1000, blit=True)
 
 # --- Main Loop ---
 try:
