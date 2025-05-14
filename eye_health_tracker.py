@@ -126,7 +126,7 @@ try:
             if ear < EYE_AR_THRESH:
                 COUNTER += 1
                 if COUNTER >= EYE_AR_CONSEC_FRAMES and not BLINKED:
-                    if current_time - last_blink_time >= 1.0:
+                    if current_time - last_blink_time >= 0.6:
                         TOTAL += 1
                         last_blink_time = current_time
                         BLINKED = True
